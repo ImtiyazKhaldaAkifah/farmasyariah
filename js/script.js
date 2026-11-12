@@ -1,119 +1,111 @@
-// --- NAVIGASI ---
-function openApp() {
-    document.getElementById('landing-page').style.display = 'none';
-    document.getElementById('app-section').style.display = 'block';
-    window.scrollTo(0,0);
-}
+        // --- SET TANGGAL OTOMATIS ---
+        document.addEventListener('DOMContentLoaded', () => {
+            const opsiTanggal = { day: 'numeric', month: 'long', year: 'numeric' };
+            const hariIni = new Date();
+            document.getElementById('tanggal-otomatis').innerText = hariIni.toLocaleDateString('id-ID', opsiTanggal);
 
-function closeApp() {
-    document.getElementById('app-section').style.display = 'none';
-    document.getElementById('landing-page').style.display = 'block';
-    window.scrollTo(0,0);
-}
+            const tglExpired = new Date(hariIni);
+            tglExpired.setMonth(hariIni.getMonth() + 3);
 
-function switchAppView(viewId, element) {
-    document.querySelectorAll('.app-view').forEach(v => v.classList.remove('active'));
-    document.getElementById('app-view-' + viewId).classList.add('active');
-    document.querySelectorAll('.dash-nav-item').forEach(n => n.classList.remove('active'));
-    if(element) element.classList.add('active');
-}
+            const opsiExpired = { month: 'long', year: 'numeric' };
+            const teksExpired = tglExpired.toLocaleDateString('id-ID', opsiExpired);
 
-// --- FITUR SCAN ---
-function startScan() {
-    document.getElementById('scan-line').style.display = 'block';
-    document.getElementById('scan-icon').className = 'fa-solid fa-spinner fa-spin';
-    document.getElementById('scan-text').innerText = "Memproses barcode...";
-    document.getElementById('btn-scan').style.display = 'none';
+            document.getElementById('info-expired').innerText = `${teksExpired} (3 Bulan Lagi)`;
+        });
 
-    setTimeout(() => {
-        document.getElementById('scan-line').style.display = 'none';
-        document.getElementById('scan-icon').className = 'fa-solid fa-barcode';
-        document.getElementById('scan-icon').style.color = 'var(--sage-dark)';
-        document.getElementById('scan-text').innerText = "Scan Berhasil!";
-        document.getElementById('scan-result').style.display = 'block';
-    }, 1500);
-}
+        // --- NAVIGASI ---
+        function openApp() {
+            document.getElementById('landing-page').style.display = 'none';
+            document.getElementById('login-screen').style.display = 'flex';
+            document.getElementById('app-section').style.display = 'none';
+            window.scrollTo(0,0);
+        }
 
-// --- FITUR RETUR ---
-function requestRetur() {
-    showToast('Pengajuan retur dikirim ke PBF!');
-    
-    // Tambah notif ke PBF
-    document.getElementById('pbf-notif').style.display = 'block';
-    
-    const tbody = document.getElementById('pbf-table-body');
-    document.getElementById('pbf-empty').style.display = 'none';
-    
-    const newRow = document.createElement('tr');
-    newRow.innerHTML = `
-        <td>Apotek Sehat</td>
-        <td><span class="badge badge-red">Retur Expired</span></td>
-        <td>Paracetamol (5 Box) <br><span style="font-size:10px; color:var(--danger);">Exp: Des 2026</span></td>
-        <td><span class="badge badge-yellow">Menunggu Review</span></td>
-        <td><button class="btn-outline" onclick="alert('Retur disetujui! Barang akan dijemput.')">Setujui Retur</button></td>
-    `;
-    tbody.prepend(newRow);
-}
+        function closeApp() {
+            document.getElementById('app-section').style.display = 'none';
+            document.getElementById('login-screen').style.display = 'none';
+            document.getElementById('landing-page').style.display = 'block';
+            window.scrollTo(0,0);
+        }
 
-// --- FITUR RESTOCK KE PBF ---
-function openRestockModal(obat) {
-    document.getElementById('modal-obat').value = obat;
-    openModal('modal-restock');
-}
+        // --- LOGIKA LOGIN ---
+        function handleLogin() {
+            const role = document.getElementById('input-role').value;
+            const namaApoteker = document.getElementById('input-nama-apoteker').value;
+            const namaApotek = document.getElementById('input-nama-apotek').value;
 
-function submitRestock() {
-    const obat = document.getElementById('modal-obat').value;
-    const jumlah = document.getElementById('modal-jumlah').value;
-    
-    closeModal('modal-restock');
-    showToast('Pesanan terkirim ke PBF!');
+            document.getElementById('pbf-nama-apotek').innerText = namaApotek;
+            document.getElementById('akad-nama-apotek').innerText = namaApotek.toUpperCase();
 
-    // 1. Tandai notif merah di menu PBF
-    document.getElementById('pbf-notif').style.display = 'block';
-    
-    // 2. Tambah baris ke tabel PBF
-    const tbody = document.getElementById('pbf-table-body');
-    document.getElementById('pbf-empty').style.display = 'none';
-    
-    const newRow = document.createElement('tr');
-    newRow.innerHTML = `
-        <td>Apotek Sehat</td>
-        <td><span class="badge badge-blue">Restock Syariah</span></td>
-        <td>${obat} (${jumlah} Box)</td>
-        <td><span class="badge badge-yellow">Perlu Dikirim</span></td>
-        <td><button class="btn-aesthetic" onclick="processOrder(this)">Proses & Kirim</button></td>
-    `;
-    tbody.prepend(newRow);
+            document.getElementById('login-screen').style.display = 'none';
+            document.getElementById('app-section').style.display = 'block';
 
-    // 3. Pindah ke halaman Financing untuk lihat jadwal
-    switchAppView('financing', document.querySelectorAll('.dash-nav-item')[2]);
-}
+            if (role === 'apotek') {
+                document.getElementById('menu-apotek').style.display = 'block';
+                document.getElementById('menu-pbf').style.display = 'none';
+                switchAppView('scan', document.querySelector('#menu-apotek .dash-nav-item'));
+                showToast(`Berhasil masuk sebagai ${namaApoteker}`);
+            } else {
+                document.getElementById('menu-apotek').style.display = 'none';
+                document.getElementById('menu-pbf').style.display = 'block';
+                switchAppView('pbf', document.querySelector('#menu-pbf .dash-nav-item'));
+                showToast(`Berhasil masuk sebagai PBF`);
+            }
+        }
 
-// --- PBF PROSES PESANAN ---
-function processOrder(btn) {
-    btn.innerHTML = '<i class="fa-solid fa-spinner fa-spin"></i> Loading';
-    btn.disabled = true;
-    
-    setTimeout(() => {
-        const row = btn.closest('tr');
-        const badge = row.querySelector('.badge-yellow');
-        badge.className = 'badge badge-green';
-        badge.innerText = 'Sudah Dikirim';
-        btn.style.display = 'none';
-        
-        // Hapus notif
-        document.getElementById('pbf-notif').style.display = 'none';
-        showToast('Barang berhasil dikirim ke Apotek!');
-    }, 1500);
-}
+        function logout() {
+            document.getElementById('app-section').style.display = 'none';
+            document.getElementById('login-screen').style.display = 'flex';
+            document.getElementById('input-nama-apoteker').value = "Apoteker Imtiyaz";
+            document.getElementById('input-nama-apotek').value = "Apotek Sehat Sejahtera";
+            document.getElementById('input-role').value = "apotek";
+            window.scrollTo(0,0);
+        }
 
-// --- MODAL & TOAST ---
-function openModal(id) { document.getElementById(id).classList.add('active'); }
-function closeModal(id) { document.getElementById(id).classList.remove('active'); }
+        // --- NAVIGASI DALAM DASHBOARD ---
+        function switchAppView(viewId, element) {
+            document.querySelectorAll('.app-view').forEach(v => v.classList.remove('active'));
+            document.getElementById('app-view-' + viewId).classList.add('active');
+            document.querySelectorAll('.dash-nav-item').forEach(n => n.classList.remove('active'));
+            if(element) element.classList.add('active');
+        }
 
-function showToast(message) {
-    const toast = document.getElementById('toast');
-    document.getElementById('toast-msg').innerText = message;
-    toast.classList.add('show');
-    setTimeout(() => { toast.classList.remove('show'); }, 3000);
-}
+        // --- FITUR SCAN ---
+        function startScan() {
+            document.getElementById('scan-line').style.display = 'block';
+            document.getElementById('scan-icon').className = 'fa-solid fa-spinner fa-spin';
+            document.getElementById('scan-text').innerText = "Memproses barcode...";
+            document.getElementById('btn-scan').style.display = 'none';
+
+            setTimeout(() => {
+                document.getElementById('scan-line').style.display = 'none';
+                document.getElementById('scan-icon').className = 'fa-solid fa-barcode';
+                document.getElementById('scan-icon').style.color = 'var(--sage-dark)';
+                document.getElementById('scan-text').innerText = "Scan Berhasil!";
+                document.getElementById('scan-result').style.display = 'block';
+                document.getElementById('btn-scan').style.display = 'inline-block';
+            }, 1500);
+        }
+
+        // --- MODAL & AKAD ---
+        function openAkad() {
+            document.getElementById('modal-akad').classList.add('active');
+            document.getElementById('signature-area').style.display = 'block';
+            document.getElementById('signed-area').style.display = 'none';
+        }
+
+        function closeModal(id) { document.getElementById(id).classList.remove('active'); }
+
+        function signAkad() {
+            document.getElementById('signature-area').style.display = 'none';
+            document.getElementById('signed-area').style.display = 'block';
+            showToast('Akad Murabahah Berhasil Ditandatangani!');
+        }
+
+        // --- TOAST ---
+        function showToast(message) {
+            const toast = document.getElementById('toast');
+            document.getElementById('toast-msg').innerText = message;
+            toast.classList.add('show');
+            setTimeout(() => { toast.classList.remove('show'); }, 3000);
+        }
