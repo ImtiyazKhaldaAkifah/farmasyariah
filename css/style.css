@@ -76,6 +76,60 @@
         .syariah-card h3 { font-size: 20px; margin-bottom: 12px; color: var(--sage-dark); }
         .syariah-card p { font-size: 14px; color: var(--text-muted); line-height: 1.7; }
 
+        /* --- TESTIMONI SECTION (MARQUEE / JALAN MUTER) --- */
+        #testimoni { padding: 100px 0; background: var(--white); text-align: center; position: relative; overflow: hidden; }
+        .testi-header { padding: 0 8%; margin-bottom: 50px; }
+
+        .marquee-container {
+            width: 100%;
+            overflow: hidden;
+            position: relative;
+            padding: 20px 0;
+            /* Efek pudar di ujung kiri dan kanan */
+            mask-image: linear-gradient(to right, transparent, black 5%, black 95%, transparent);
+            -webkit-mask-image: linear-gradient(to right, transparent, black 5%, black 95%, transparent);
+        }
+
+        .marquee-track {
+            display: flex;
+            gap: 30px;
+            width: max-content;
+            /* Animasi jalan muter */
+            animation: scrollMarquee 25s linear infinite;
+        }
+
+        /* Berhenti saat mouse diarahkan (biar bisa dibaca) */
+        .marquee-track:hover {
+            animation-play-state: paused;
+        }
+
+        @keyframes scrollMarquee {
+            0% { transform: translateX(0); }
+            100% { transform: translateX(calc(-50% - 15px)); } /* -50% karena kita duplikat kartunya */
+        }
+
+        .testi-card {
+            background: var(--bg-cream);
+            padding: 32px;
+            border-radius: 20px;
+            border: 1px solid rgba(0,0,0,0.03);
+            text-align: left;
+            position: relative;
+            transition: 0.3s;
+            width: 380px; /* Lebar tetap untuk kartu marquee */
+            white-space: normal; /* Biar teksnya bungkus ke bawah */
+            flex-shrink: 0;
+        }
+
+        .testi-card:hover { transform: translateY(-5px); box-shadow: 0 15px 30px rgba(0,0,0,0.05); border-color: var(--rose); }
+        .quote-icon { color: var(--rose); font-size: 30px; margin-bottom: 16px; opacity: 0.5;}
+        .testi-text { font-size: 14px; color: var(--text-dark); line-height: 1.7; margin-bottom: 24px; font-style: italic; }
+        .testi-user { display: flex; align-items: center; gap: 12px; }
+        .testi-avatar { width: 45px; height: 45px; background: linear-gradient(135deg, var(--sage) 0%, var(--sage-dark) 100%); color: white; border-radius: 50%; display: flex; justify-content: center; align-items: center; font-size: 18px; font-weight: 600; }
+        .testi-info h4 { font-size: 14px; font-weight: 600; color: var(--text-dark); margin-bottom: 2px; }
+        .testi-info p { font-size: 12px; color: var(--text-muted); }
+
+        /* --- FOOTER --- */
         footer { background: var(--dark-footer); color: var(--bg-cream); padding: 80px 8% 30px; position: relative; }
         .footer-grid { display: grid; grid-template-columns: 2fr 1fr 1fr; gap: 60px; margin-bottom: 60px; }
         .footer-brand h2 { font-family: 'Playfair Display', serif; font-size: 32px; margin-bottom: 16px; color: var(--white); }
@@ -91,29 +145,9 @@
         .footer-bottom { border-top: 1px solid rgba(255,255,255,0.1); padding-top: 30px; text-align: center; font-size: 13px; color: #A0AAB2; }
         .footer-bottom b { color: var(--white); }
 
-        /* ============================================== */
-        /* HALAMAN LOGIN (MOCKUP) - DIPERBAIKI            */
-        /* ============================================== */
-        #login-screen {
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            min-height: 100vh;
-            padding: 120px 20px 50px; /* Padding atas dibesarkan agar tidak nabrak navbar */
-            background: linear-gradient(135deg, rgba(253,251,247,1) 0%, rgba(232,180,184,0.2) 100%);
-        }
-        .login-card {
-            background: var(--white);
-            padding: 40px;
-            border-radius: 24px;
-            box-shadow: 0 20px 50px rgba(0,0,0,0.1);
-            width: 400px;
-            max-width: 100%;
-            text-align: center;
-            border: 1px solid var(--rose);
-            position: relative;
-        }
-        /* Logo di dalam card */
+        /* --- LOGIN & DASHBOARD (SAMA SEPERTI SEBELUMNYA) --- */
+        #login-screen { display: flex; justify-content: center; align-items: center; min-height: 100vh; padding: 120px 20px 50px; background: linear-gradient(135deg, rgba(253,251,247,1) 0%, rgba(232,180,184,0.2) 100%); }
+        .login-card { background: var(--white); padding: 40px; border-radius: 24px; box-shadow: 0 20px 50px rgba(0,0,0,0.1); width: 400px; max-width: 100%; text-align: center; border: 1px solid var(--rose); position: relative; }
         .login-card .logo-icon-box { width: 60px; height: 60px; font-size: 30px; margin: 0 auto 16px; border-radius: 16px; }
         .login-card h2 { font-family: 'Playfair Display', serif; font-size: 28px; margin-bottom: 8px; }
         .login-card p { font-size: 14px; color: var(--text-muted); margin-bottom: 32px; }
@@ -126,62 +160,43 @@
         .btn-login { width: 100%; padding: 16px; background: var(--rose-dark); color: white; border: none; border-radius: 12px; font-weight: 600; font-size: 15px; cursor: pointer; transition: 0.3s; margin-top: 10px; box-shadow: 0 10px 20px rgba(196, 139, 144, 0.3);}
         .btn-login:hover { background: var(--rose); transform: translateY(-2px); }
 
-        /* ============================================== */
-        /* APP SECTION (DASHBOARD)                        */
-        /* ============================================== */
         #app-section { display: none; padding: 100px 8% 50px; background: var(--bg-cream); min-height: 100vh; }
-
         .dash-container { background: var(--white); border-radius: 24px; box-shadow: 0 20px 50px rgba(0,0,0,0.08); overflow: hidden; display: flex; height: 80vh; }
-
-        /* SIDEBAR */
         .dash-sidebar { width: 250px; background: #F9F9F9; border-right: 1px solid #EEE; padding: 24px 16px; display: flex; flex-direction: column; }
         .dash-nav-item { display: flex; align-items: center; gap: 12px; padding: 14px; border-radius: 12px; color: var(--text-muted); cursor: pointer; font-size: 14px; font-weight: 500; margin-bottom: 8px; transition: 0.2s; }
         .dash-nav-item:hover { background: rgba(232, 180, 184, 0.1); color: var(--rose-dark); }
         .dash-nav-item.active { background: var(--rose); color: white; }
-
-        /* LOGOUT BUTTON */
         .btn-logout { margin-top: auto; background: transparent; border: 1px solid #DDD; color: var(--text-muted); padding: 12px; border-radius: 10px; font-weight: 600; cursor: pointer; transition: 0.3s; display: flex; align-items: center; justify-content: center; gap: 8px; }
         .btn-logout:hover { background: #FEE2E2; color: #DC2626; border-color: #FCA5A5; }
-
         .dash-main { flex: 1; padding: 32px; overflow-y: auto; background: #FDFDFD; }
         .dash-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 32px; }
         .dash-header h2 { font-family: 'Playfair Display', serif; font-size: 28px; }
-
         .card { background: var(--white); border: 1px solid #EEE; border-radius: 16px; padding: 24px; box-shadow: 0 4px 15px rgba(0,0,0,0.02); margin-bottom: 24px; }
         table { width: 100%; border-collapse: collapse; text-align: left; }
         th { padding: 12px; font-size: 12px; color: var(--text-muted); border-bottom: 2px solid #EEE; text-transform: uppercase; }
         td { padding: 16px 12px; font-size: 14px; border-bottom: 1px solid #F5F5F5; }
-
         .btn-aesthetic { background: var(--sage); color: white; padding: 10px 20px; border-radius: 10px; border: none; font-weight: 600; cursor: pointer; transition: 0.2s; font-size: 13px; }
         .btn-aesthetic:hover { background: var(--sage-dark); }
         .btn-rose { background: var(--rose); color: white; padding: 10px 20px; border-radius: 10px; border: none; font-weight: 600; cursor: pointer; transition: 0.2s; font-size: 13px; }
         .btn-rose:hover { background: var(--rose-dark); }
-
         .badge { padding: 6px 12px; border-radius: 20px; font-size: 11px; font-weight: 600; }
         .badge-red { background: rgba(239, 68, 68, 0.1); color: #DC2626; }
         .badge-green { background: rgba(16, 185, 129, 0.1); color: #059669; }
         .badge-blue { background: rgba(59, 130, 246, 0.1); color: #2563EB; }
-
-        /* VIEWS */
         .app-view { display: none; animation: fadeIn 0.4s ease; }
         .app-view.active { display: block; }
-
-        /* --- SURAT AKAD MURABAHAH --- */
         .akad-paper { background: #FFF; border: 1px solid #DDD; padding: 40px; border-radius: 8px; font-family: 'Times New Roman', Times, serif; font-size: 15px; line-height: 1.6; color: #000; box-shadow: 0 10px 30px rgba(0,0,0,0.1); max-height: 60vh; overflow-y: auto;}
         .akad-paper h3 { text-align: center; margin-bottom: 20px; font-weight: bold; font-size: 18px;}
         .akad-paper p { margin-bottom: 12px; text-align: justify;}
         .akad-paper table { width: 100%; margin: 20px 0; border-collapse: collapse; }
         .akad-paper td { padding: 8px; border: none; font-size: 14px; }
         .signature-pad { border: 2px dashed #CCC; padding: 20px; text-align: center; margin-top: 20px; background: #FAFAFA; border-radius: 8px;}
-
         .scan-box { text-align: center; padding: 40px; border: 2px dashed var(--rose); border-radius: 16px; background: rgba(232, 180, 184, 0.05); position: relative; }
         .scan-line { position: absolute; top: 0; left: 0; width: 100%; height: 2px; background: var(--rose-dark); animation: scanAnim 2s infinite linear; display: none; }
         @keyframes scanAnim { 0% { top: 0; } 50% { top: 100%; } 100% { top: 0; } }
-
         .modal-overlay { position: fixed; top: 0; left: 0; right: 0; bottom: 0; background: rgba(0,0,0,0.6); backdrop-filter: blur(5px); display: flex; justify-content: center; align-items: center; z-index: 1000; opacity: 0; pointer-events: none; transition: 0.3s; }
         .modal-overlay.active { opacity: 1; pointer-events: all; }
         .modal { background: var(--white); border-radius: 16px; padding: 30px; width: 700px; max-width: 90%; text-align: center; transform: translateY(20px); transition: 0.3s; }
         .modal-overlay.active .modal { transform: translateY(0); }
-
         #toast { position: fixed; bottom: 30px; right: 30px; background: var(--sage-dark); color: white; padding: 16px 24px; border-radius: 12px; font-weight: 500; display: flex; align-items: center; gap: 12px; transform: translateY(100px); opacity: 0; transition: all 0.4s; z-index: 999; }
         #toast.show { transform: translateY(0); opacity: 1; }

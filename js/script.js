@@ -13,6 +13,27 @@
             document.getElementById('info-expired').innerText = `${teksExpired} (3 Bulan Lagi)`;
         });
 
+        // --- FUNGSI UNTUK UBAH LABEL FORM SAAT DROPDOWN DIGANTI ---
+        function updateFormLabels() {
+            const role = document.getElementById('input-role').value;
+            const labelUser = document.getElementById('label-nama-user');
+            const labelInst = document.getElementById('label-nama-inst');
+            const inputUser = document.getElementById('input-nama-user');
+            const inputInst = document.getElementById('input-nama-inst');
+
+            if (role === 'pbf') {
+                labelUser.innerText = "Nama Admin / PIC PBF";
+                labelInst.innerText = "Nama Perusahaan PBF (PT)";
+                inputUser.value = "Admin PBF";
+                inputInst.value = "PT Kimia Farma Trading";
+            } else {
+                labelUser.innerText = "Nama Pengguna / Apoteker";
+                labelInst.innerText = "Nama Apotek";
+                inputUser.value = "Apoteker Imtiyaz";
+                inputInst.value = "Apotek Sehat Sejahtera";
+            }
+        }
+
         // --- NAVIGASI ---
         function openApp() {
             document.getElementById('landing-page').style.display = 'none';
@@ -31,11 +52,11 @@
         // --- LOGIKA LOGIN ---
         function handleLogin() {
             const role = document.getElementById('input-role').value;
-            const namaApoteker = document.getElementById('input-nama-apoteker').value;
-            const namaApotek = document.getElementById('input-nama-apotek').value;
+            const namaUser = document.getElementById('input-nama-user').value;
+            const namaInst = document.getElementById('input-nama-inst').value;
 
-            document.getElementById('pbf-nama-apotek').innerText = namaApotek;
-            document.getElementById('akad-nama-apotek').innerText = namaApotek.toUpperCase();
+            document.getElementById('pbf-nama-apotek').innerText = namaInst;
+            document.getElementById('akad-nama-apotek').innerText = namaInst.toUpperCase();
 
             document.getElementById('login-screen').style.display = 'none';
             document.getElementById('app-section').style.display = 'block';
@@ -44,21 +65,20 @@
                 document.getElementById('menu-apotek').style.display = 'block';
                 document.getElementById('menu-pbf').style.display = 'none';
                 switchAppView('scan', document.querySelector('#menu-apotek .dash-nav-item'));
-                showToast(`Berhasil masuk sebagai ${namaApoteker}`);
+                showToast(`Berhasil masuk sebagai ${namaUser}`);
             } else {
                 document.getElementById('menu-apotek').style.display = 'none';
                 document.getElementById('menu-pbf').style.display = 'block';
                 switchAppView('pbf', document.querySelector('#menu-pbf .dash-nav-item'));
-                showToast(`Berhasil masuk sebagai PBF`);
+                showToast(`Berhasil masuk sebagai ${namaInst}`);
             }
         }
 
         function logout() {
             document.getElementById('app-section').style.display = 'none';
             document.getElementById('login-screen').style.display = 'flex';
-            document.getElementById('input-nama-apoteker').value = "Apoteker Imtiyaz";
-            document.getElementById('input-nama-apotek').value = "Apotek Sehat Sejahtera";
             document.getElementById('input-role').value = "apotek";
+            updateFormLabels();
             window.scrollTo(0,0);
         }
 
